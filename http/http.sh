@@ -1,10 +1,18 @@
 #!/bin/bash
 
+# The directory path where you store this library, default /srv/vcontainer
+VCON_BASE_DIR=${VCON_BASE_DIR:-"/srv/vcontainer"}
+
 # Number of retries for HTTP requests, default 5
 VCONUTILS_HTTP_RETRY=${VCONTAINER_UTILS_HTTP_RETRY:-5}
 
 # Delay between retries for HTTP requests, default 30 seconds
 VCONUTILS_HTTP_RETRY_DELAY=${VCONTAINER_UTILS_HTTP_RETRY_DELAY:-30}
+
+
+# Include checker module
+. $VCON_BASE_DIR/utils/checker.sh
+
 
 function makeRequest() {
   method=$1
@@ -16,7 +24,7 @@ function makeRequest() {
 
   case $x in
   "GET")
-
+    _makeGetRequest $url $headers $expectedStatusCode $options
     ;;
   esac
 
@@ -42,4 +50,3 @@ function _makeGetRequest() {
 
   curl -X GET $url -H $headers -d $body
 }
-
