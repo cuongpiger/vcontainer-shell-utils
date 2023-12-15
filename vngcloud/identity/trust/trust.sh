@@ -12,6 +12,7 @@
 #################################################### IMPORT MODULES ####################################################
 # Import checker module
 . $VCON_BASE_DIR/utils/checker.sh
+. $VCON_BASE_DIR/utils/logs.sh
 
 ################################################ SETUP DEFAULT VARIABLES ###############################################
 # Number of retries for HTTP requests, default 5
@@ -36,7 +37,7 @@ function getToken() {
   local identityDomain=$3
 
   if [ $(isEmpty "$username") -eq "1" ] || [ $(isEmpty "$password") -eq "1" ] || [ $(isEmpty "$identityDomain") -eq "1" ]; then
-    echo "ERROR: The username, password and identity domain must be provided"
+    log_error "The username, password and identity domain must be provided"
     exit 1
   fi
 
@@ -47,23 +48,23 @@ function getToken() {
 
   i=0
   while [ $i -lt $VCONUTILS_HTTP_RETRY ]; do
-    echo "INFO: Trying to get token from $authURL"
+    log_info "Trying to get token from $authURL"
+
     response=$(curl $verifyCA -s -i -X POST -H "$headers" -d "$reqBody" $authURL)
-    echo "INFO: Response: $response"
+    log_info "Response: $response">/dev/null
     if [ $(echo "$response" | grep "HTTP/1.1 20" | wc -l) -eq 1 ]; then
-      echo "INFO: Get token successfully"
-      token=$(_extractTokenFromResponse "$response")
-      return "$token"
+      log_info "Get token successfully">/dev/null
+      echo $(_extractTokenFromResponse "$response")
       break
     else
-      echo "ERROR: Failed to get token"
+      log_error "Failed to get token">/dev/null
       sleep $VCONUTILS_HTTP_RETRY_DELAY
       i=$((i + 1))
     fi
   done
 
   if [ $i -eq $VCONUTILS_HTTP_RETRY ]; then
-    echo "ERROR: Failed to get token after $VCONUTILS_HTTP_RETRY retries"
+    log_error "Failed to get token after $VCONUTILS_HTTP_RETRY retries"
     exit 1
   fi
 }
