@@ -16,10 +16,10 @@
 
 ################################################ SETUP DEFAULT VARIABLES ###############################################
 # Number of retries for HTTP requests, default 5
-VCONUTILS_HTTP_RETRY=${VCONTAINER_UTILS_HTTP_RETRY:-5}
+VCONUTILS_HTTP_RETRY=${VCONUTILS_HTTP_RETRY:-5}
 
 # Delay between retries for HTTP requests, default 10 seconds
-VCONUTILS_HTTP_RETRY_DELAY=${VCONTAINER_UTILS_HTTP_RETRY_DELAY:-10}
+VCONUTILS_HTTP_RETRY_DELAY=${VCONUTILS_HTTP_RETRY_DELAY:-10}
 
 
 #################################################### FUNCTION LIST #####################################################
@@ -51,13 +51,13 @@ function getToken() {
     log_info "Trying to get token from $authURL"
 
     response=$(curl $verifyCA -s -i -X POST -H "$headers" -d "$reqBody" $authURL)
-    log_info "Response: $response">/dev/null
+    log_info "Response: $response"
     if [ $(echo "$response" | grep "HTTP/1.1 20" | wc -l) -eq 1 ]; then
-      log_info "Get token successfully">/dev/null
+      log_info "Get token successfully"
       echo $(_extractTokenFromResponse "$response")
       break
     else
-      log_error "Failed to get token">/dev/null
+      log_error "Failed to get token"
       sleep $VCONUTILS_HTTP_RETRY_DELAY
       i=$((i + 1))
     fi

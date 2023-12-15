@@ -5,6 +5,12 @@
 # Description: This file contains some functions to log
 ########################################################################################################################
 
+
+################################################ SETUP DEFAULT VARIABLES ###############################################
+VCONUTILS_LOG_LEVEL=${VCONUTILS_LOG_LEVEL:-""}
+
+
+#################################################### FUNCTION LIST #####################################################
 # Print message to stderr
 function echo_stderr {
   >&2 echo "$@"
@@ -22,7 +28,7 @@ function log {
 
 # Log message with level DEBUG
 function log_debug {
-  if [ -z "${OTEL_LOG_LEVEL-}" ]; then
+  if [ -z "${VCONUTILS_LOG_LEVEL-}" ]; then
     local -r message="$1"
 	else
     local -r message="$1"
