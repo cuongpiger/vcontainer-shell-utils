@@ -69,12 +69,23 @@ function getToken() {
   fi
 }
 
+# From the entire response, extract the token
+# Params:
+#   $1: response from identity service
+# Return:
+#   Access token with expiration time in 7 hours
 function _extractTokenFromResponse() {
   local response=$1
   local token=$(echo "$response" | grep -i X-Subject-Token | awk '{print $2}' | tr -d '[[:space:]]')
   echo "$token"
 }
 
+# Generate request body to get token
+# Params:
+#   $1: trust ID, eg: `4387b0f4c6e84d1eb0xxx7481c989xxx`
+#   $2: trust password, eg: `4G3exxxxxxGD334HjU`
+# Return:
+#   Request body to get token
 function _genGetTokenRequestBody() {
   local trustID=$1
   local trustPassword=$2
@@ -97,4 +108,3 @@ function _genGetTokenRequestBody() {
 }'
   echo "$reqBody"
 }
-
