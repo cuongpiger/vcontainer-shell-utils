@@ -26,29 +26,30 @@ function getToken() {
   local reqBody=$(_genGetTokenRequestBody "$username" "$password")
   local headers="Content-Type: application/json"
   local verifyCA=$( [ "$VERIFY_CA" == "True" ] && echo "-k" )
-  local cmd="curl $verifyCA -s -i -X POST -H "$headers" -d "$reqBody" $authURL"
+  local cmd="curl $verifyCA -s -i -X POST -H '"$headers"' -d '"$reqBody"' $authURL"
 
-  i=0
-  while [ $i -lt $VCONUTILS_HTTP_RETRY ]; do
-    echo "INFO: Trying to get token from $authURL"
-    echo "INFO: $cmd"
-    response=$($cmd)
-    echo "INFO: Response: $response"
-    if [ $(echo "$response" | grep "HTTP/1.1 20" | wc -l) -eq 1 ]; then
-      echo "INFO: Get token successfully"
-      echo $(_extractTokenFromResponse "$response")
-      break
-    else
-      echo "ERROR: Failed to get token"
-      sleep $VCONUTILS_HTTP_RETRY_DELAY
-      i=$((i + 1))
-    fi
-  done
-
-  if [ $i -eq $VCONUTILS_HTTP_RETRY ]; then
-    echo "ERROR: Failed to get token after $VCONUTILS_HTTP_RETRY retries"
-    exit 1
-  fi
+  echo "The command is: $cmd"
+#  i=0
+#  while [ $i -lt $VCONUTILS_HTTP_RETRY ]; do
+#    echo "INFO: Trying to get token from $authURL"
+#    echo "INFO: $cmd"
+#    response=$($cmd)
+#    echo "INFO: Response: $response"
+#    if [ $(echo "$response" | grep "HTTP/1.1 20" | wc -l) -eq 1 ]; then
+#      echo "INFO: Get token successfully"
+#      echo $(_extractTokenFromResponse "$response")
+#      break
+#    else
+#      echo "ERROR: Failed to get token"
+#      sleep $VCONUTILS_HTTP_RETRY_DELAY
+#      i=$((i + 1))
+#    fi
+#  done
+#
+#  if [ $i -eq $VCONUTILS_HTTP_RETRY ]; then
+#    echo "ERROR: Failed to get token after $VCONUTILS_HTTP_RETRY retries"
+#    exit 1
+#  fi
 }
 
 function _extractTokenFromResponse() {
