@@ -27,7 +27,6 @@ function makeRequest() {
     _makeGetRequest $url $headers $expectedStatusCode $options
     ;;
   esac
-
 }
 
 function _makeGetRequest() {
@@ -36,10 +35,17 @@ function _makeGetRequest() {
   expectedStatusCode=$3
   options=$4
 
+  if [ $(isEmpty "$url") == 1 ]; then
+    echo "[ERROR] The URL is empty."
+    return
+  fi
+
   cmd="curl ${options} -X GET"
   if [ -n "$headers" ]; then
     cmd="$cmd -H $headers"
   fi
+
+
 
   # check url is empty or not, return 1 if empty
   if [ -z "$url" ]; then

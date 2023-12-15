@@ -10,9 +10,9 @@ function isEmpty() {
   str=$(trimming "$1")
   if [ -z "$str" ] || [ "$str" == "null" ]; then
     # empty
-    return 1
+    echo "1"
   else
-    return 0
+    echo "0"
   fi
 }
 
