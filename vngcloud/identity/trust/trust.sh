@@ -53,7 +53,7 @@ function getToken() {
     if [ $(echo "$response" | grep "HTTP/1.1 20" | wc -l) -eq 1 ]; then
       echo "INFO: Get token successfully"
       token=$(_extractTokenFromResponse "$response")
-      echo "$token"
+      return "$token"
       break
     else
       echo "ERROR: Failed to get token"
